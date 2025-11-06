@@ -1,0 +1,38 @@
+import sys
+from PyQt5.QtWidgets import QApplication, QLabel
+from PyQt5.QtCore import Qt, QTimer, QPoint
+from PyQt5.QtGui import QPixmap
+import random
+
+class PetDesktop(QLabel):
+    def __init__(self):
+        super().__init__()
+
+        # imagem do pet
+        self.pixmap = QPixmap("pet.png")  # coloque uma imagem .png com fundo transparente
+        self.setPixmap(self.pixmap)
+
+        # configurações da janela
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.SubWindow)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+
+        # posição inicial
+        self.x = 100
+        self.y = 100
+        self.move(self.x, self.y)
+        self.show()
+
+        # movimento automático
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.move_random)
+        self.timer.start(1000)
+
+    def move_random(self):
+        self.x += random.choice([-20, -10, 0, 10, 20])
+        self.y += random.choice([-10, 0, 10])
+        self.move(self.x, self.y)
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    pet = PetDesktop()
+    sys.exit(app.exec_())
